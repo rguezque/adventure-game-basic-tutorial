@@ -66,8 +66,6 @@ class Player {
             this.width, 
             this.height
         )
-        //context.fillStyle = 'red'
-        //context.fillRect(this.position.x, this.position.y, this.width, this.height)
     }
 
     update() {
@@ -133,14 +131,16 @@ function createImage(imageSrc) {
     return image
 }
 
-// Init the game
+// Create the character
 let player = new Player()
 
-// Create the platforms
-//let platformImage = createImage(platform)
-//let platformTall = createImage(platformSmallTall)
+// Create the platforms array
 let platforms = []
-// Create background and hills
+// Platform image
+let platformImage = createImage(platform)
+// Platform taller image
+let platformTall = createImage(platformSmallTall)
+// Create background and hills array
 let genericObjects = []
 
 let lastKey
@@ -160,9 +160,13 @@ let scrollOffset = 0
 function init() {
     player = new Player()
 
+    // Create background and hills
+    genericObjects = [
+        new GenericObject({x:-1, y:-1, image:createImage(background)}),
+        new GenericObject({x:-1, y:-1, image:createImage(hills)})
+    ]
+
     // Create the platforms
-    let platformImage = createImage(platform)
-    let platformTall = createImage(platformSmallTall)
     platforms = [
         new Platform({x:0, y:canvas.height-platformImage.height, image:platformImage}),
         new Platform({x:platformImage.width-2, y:canvas.height-platformImage.height, image:platformImage}),
@@ -174,20 +178,14 @@ function init() {
         new Platform({x:platformImage.width*7-100, y:canvas.height-platformTall.height, image:platformTall})
     ]
 
-    // Create background and hills
-    genericObjects = [
-        new GenericObject({x:-1, y:-1, image:createImage(background)}),
-        new GenericObject({x:-1, y:-1, image:createImage(hills)})
-    ]
-
     scrollOffset = 0
 }
 
 
 function animate() {
     requestAnimationFrame(animate)
-    context.fillStyle = 'white'
     context.fillRect(0, 0, canvas.width, canvas.height)
+    context.fillStyle = 'white'
     
     // Background and hills
     genericObjects.forEach(genericObject => {
@@ -262,8 +260,8 @@ function animate() {
     }
 
     // Win condition
-    if(scrollOffset > 2000) {
-        console.log('YOU WIN')
+    if(scrollOffset > 4000) {
+        window.alert('YOU WIN')
     }
     // Lose condition
     if(player.position.y > canvas.height) {
@@ -275,7 +273,6 @@ init()
 animate()
 
 window.addEventListener('keydown', ({ keyCode }) => {
-    console.log(keyCode)
     switch(keyCode) {
         case 37:
             console.log('left')
@@ -298,7 +295,6 @@ window.addEventListener('keydown', ({ keyCode }) => {
 })
 
 window.addEventListener('keyup', ({ keyCode }) => {
-    console.log(keyCode)
     switch(keyCode) {
         case 37:
             console.log('left')
